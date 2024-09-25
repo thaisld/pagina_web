@@ -1,3 +1,14 @@
+// Verifica se o usuário está logado ao carregar a página
+document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('loggedIn') === 'true') {
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('main-container').style.display = 'block';
+        carregarAlunos();
+    } else {
+        document.getElementById('login-container').style.display = 'block';
+    }
+});
+
 // Lógica de autenticação ao enviar o formulário de login
 document.getElementById('login-form').addEventListener('submit', function(event) {
     event.preventDefault(); 
@@ -7,17 +18,22 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 
     // Aqui você pode substituir por uma chamada para sua API de autenticação
     if (username === 'admin' && password === 'senha123') {
-        // Se o login for bem-sucedido, exibe o container principal e oculta o de login
+        // Salva o estado de login no localStorage
+        localStorage.setItem('loggedIn', 'true');
+
+        // Exibe o container principal e oculta o de login
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('main-container').style.display = 'block';
+
+        carregarAlunos(); // Carrega os dados ao fazer login
     } else {
-        // Se o login falhar, exibe uma mensagem de erro
         document.getElementById('login-error').style.display = 'block';
     }
 });
 
 // Função para deslogar ao clicar no botão "Logoff"
 document.getElementById("logoff-button").addEventListener("click", function() {
+    localStorage.removeItem('loggedIn'); // Remove o estado de login
     document.getElementById("main-container").style.display = "none"; // Esconde a página de controle
     document.getElementById("login-container").style.display = "block"; // Mostra a página de login
 });
@@ -50,6 +66,9 @@ async function carregarAlunos() {
         console.error('Erro ao carregar alunos:', error);
     }
 }
+
+// Atualiza os dados automaticamente a cada 10 segundos (10000ms)
+setInterval(carregarAlunos, 10000);
 
 // Chama a função de carregar alunos quando o DOM estiver completamente carregado
 document.addEventListener('DOMContentLoaded', carregarAlunos);
