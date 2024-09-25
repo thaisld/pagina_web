@@ -1,5 +1,6 @@
+// Lógica de autenticação ao enviar o formulário de login
 document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previne o envio padrão do formulário
+    event.preventDefault(); 
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -15,6 +16,13 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     }
 });
 
+// Função para deslogar ao clicar no botão "Logoff"
+document.getElementById("logoff-button").addEventListener("click", function() {
+    document.getElementById("main-container").style.display = "none"; // Esconde a página de controle
+    document.getElementById("login-container").style.display = "block"; // Mostra a página de login
+});
+
+// Função para carregar alunos
 async function carregarAlunos() {
     try {
         const response = await fetch('http://10.1.24.62:5000/alunos');
@@ -43,4 +51,5 @@ async function carregarAlunos() {
     }
 }
 
+// Chama a função de carregar alunos quando o DOM estiver completamente carregado
 document.addEventListener('DOMContentLoaded', carregarAlunos);
